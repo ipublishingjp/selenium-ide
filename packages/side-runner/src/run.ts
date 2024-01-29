@@ -95,6 +95,23 @@ const buildRun =
             } catch (e) {
               console.log('Failed to take screenshot', e)
             }
+          } else if (!failure && configuration.screenshotSuccessDirectory) {
+            try {
+              const w = await driver.driver.executeScript('return document.body.scrollWidth') as number;
+              const h = await driver.driver.executeScript('return document.body.scrollHeight') as number;
+              await driver.driver.manage().window().setRect({ x: 0, y: 0, width: w, height: h })
+              const screen = await driver.driver.takeScreenshot()
+              await fs.writeFile(
+                  path.join(
+                      configuration.screenshotSuccessDirectory,
+                      configuration.screenshotSuccessFilename ?? `${test.name}_${Date.now()}.png`
+                  ),
+                  screen,
+                  'base64'
+              )
+            } catch (e) {
+              console.log('Failed to take screenshot', e)
+            }
           }
           await playback.cleanup()
           await driver.cleanup()

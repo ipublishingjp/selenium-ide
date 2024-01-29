@@ -93,6 +93,14 @@ program
     'Write screenshots of failed tests to file in specified directory. Name will be based on test + timestamp.'
   )
   .option(
+      '-z2d, --screenshot-success-directory [directory]',
+      'Write screenshots of succeed tests to file in specified directory.'
+  )
+  .option(
+    '-z2f, --screenshot-success-filename [file]',
+    'Write screenshots of succeed tests to file in specified directory.'
+  )
+  .option(
     '-f, --force',
     "Forcibly run the project, regardless of project's version"
   )
@@ -121,6 +129,8 @@ let configuration: Configuration = {
   force: options.force,
   maxWorkers: os.cpus().length,
   screenshotFailureDirectory: options.screenshotFailureDirectory,
+  screenshotSuccessDirectory: options.screenshotSuccessDirectory,
+  screenshotSuccessFilename: options.screenshotSuccessFilename,
   // Convert all project paths into absolute paths
   projects: [],
   proxyOptions: {},
@@ -186,6 +196,12 @@ if (options.outputDirectory) {
 if (options.screenshotFailureDirectory) {
   if (!fs.existsSync(options.screenshotFailureDirectory)) {
     fs.mkdirSync(options.screenshotFailureDirectory, { recursive: true })
+  }
+}
+
+if (options.screenshotSuccessDirectory) {
+  if (!fs.existsSync(options.screenshotSuccessDirectory)) {
+    fs.mkdirSync(options.screenshotSuccessDirectory, { recursive: true })
   }
 }
 
